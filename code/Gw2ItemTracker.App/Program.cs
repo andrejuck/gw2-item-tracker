@@ -1,3 +1,4 @@
+using Gw2ItemTracker.App.Applications;
 using Gw2ItemTracker.Infra;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<ISynchronizeApplication, SynchronizeApplication>();
 builder.Services.AddTransient<IGw2HttpClient, Gw2HttpClient>();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
