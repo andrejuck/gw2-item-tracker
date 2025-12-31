@@ -6,10 +6,17 @@ namespace Gw2ItemTracker.Infra;
 public class Gw2HttpClient : IGw2HttpClient
 {
     private readonly HttpClient _client;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
     public Gw2HttpClient()
     {
         _client = new HttpClient();
         _client.BaseAddress = new Uri("https://api.guildwars2.com/");
+        _jsonSerializerOptions = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+            IncludeFields = true,
+            IgnoreNullValues = true,
+        };
     }
 
     public async Task<T?> GetAsync<T>(PagedRequest request, string endpoint)
@@ -19,9 +26,10 @@ public class Gw2HttpClient : IGw2HttpClient
             Query = $"page={request.CurrentPage - 1}&page_size={request.PageSize}",
             Path = endpoint 
         };
+        
         var response = await _client.GetAsync(uriBuilder.Uri);
         var content = await response.Content.ReadAsStringAsync();
         
-        return JsonSerializer.Deserialize<T>(content);
+        return JsonSerializer.Deserialize<T>(content, _jsonSerializerOptions);
     }
 } 

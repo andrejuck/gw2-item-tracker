@@ -4,6 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aa3a9d35-ecac-4cbf-bbd1-2d042df3f1cb</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,6 +17,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Gw2ItemTracker.Domain\Gw2ItemTracker.Domain.csproj" />
       <ProjectReference Include="..\Gw2ItemTracker.Infra\Gw2ItemTracker.Infra.csproj" />
+      <ProjectReference Include="..\Gw2ItemTracker.Services\Gw2ItemTracker.Services.csproj" />
     </ItemGroup>
 
 </Project>

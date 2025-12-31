@@ -12,4 +12,12 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MongoDB.Driver" Version="3.5.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Gw2ItemTracker.Domain\Gw2ItemTracker.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
