@@ -1,5 +1,6 @@
 using System.Threading.Channels;
 using Gw2ItemTracker.App.Adapters;
+using Gw2ItemTracker.App.Application;
 using Gw2ItemTracker.App.Helpers;
 using Gw2ItemTracker.App.Settings;
 using Gw2ItemTracker.Domain.Adapters;
@@ -17,12 +18,22 @@ builder.Services.AddSwaggerGen();
 var mongoConn = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
 builder.Services.AddMongoDbContext(mongoConn.ConnectionString, mongoConn.DbName);
 
-builder.Services.AddScoped<ISynchronizeAdapter, SynchronizeAdapter>();
 builder.Services.AddTransient<IGw2HttpClient, Gw2HttpClient>();
+builder.Services.AddTransient<ISynchronizeApplication, SynchronizeApplication>();
+
+builder.Services.AddScoped<ISynchronizeAdapter, SynchronizeAdapter>();
 builder.Services.AddTransient<IItemAdapter, ItemAdapter>();
+builder.Services.AddTransient<IRecipeAdapter, RecipeAdapter>();
+
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
+builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
+
 builder.Services.AddSingleton(_ => Channel.CreateUnbounded<ProcessingResource<ItemDto>>());
+builder.Services.AddSingleton(_ => Channel.CreateUnbounded<ProcessingResource<RecipeDto>>());
+
 builder.Services.AddHostedService<ItemService>();
+builder.Services.AddHostedService<RecipeService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
