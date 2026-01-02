@@ -1,11 +1,11 @@
 using Gw2ItemTracker.Domain.Dto;
 using Gw2ItemTracker.Domain.Models;
 
-namespace Gw2ItemTracker.Domain.Adapters;
+namespace Gw2ItemTracker.Services.Adapters;
 
-public class RecipeAdapter : IRecipeAdapter
+public static class RecipeAdapter
 {
-    public Recipe ConvertToDomain(RecipeDto dto, Item recipeItem, int currentPage) =>
+    public static Recipe ConvertToDomain(RecipeDto dto, Item recipeItem, int currentPage) =>
         new Recipe(dto.id,
             dto.type,
             dto.output_item_id,
@@ -19,6 +19,6 @@ public class RecipeAdapter : IRecipeAdapter
             dto.chat_link,
             currentPage);
 
-    private IEnumerable<Ingredient> ConvertToDomain(IEnumerable<IngredientDto> dtos) =>
-        dtos.Select(dto => new Ingredient(dto.id, dto.type, dto.count));
+    private static IEnumerable<Ingredient> ConvertToDomain(IEnumerable<IngredientDto> dtos) =>
+        dtos.Select(dto => new Ingredient(dto.item_id, dto.type, dto.count));
 }

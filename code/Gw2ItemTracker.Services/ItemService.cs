@@ -1,8 +1,8 @@
 ﻿using System.Threading.Channels;
-using Gw2ItemTracker.Domain.Adapters;
 using Gw2ItemTracker.Domain.Dto;
 using Gw2ItemTracker.Domain.Models;
 using Gw2ItemTracker.Infra.Context;
+using Gw2ItemTracker.Services.Adapters;
 using Microsoft.Extensions.Hosting;
 
 namespace Gw2ItemTracker.Services;
@@ -11,17 +11,14 @@ public class ItemService : BackgroundService
 {
     private readonly Channel<ProcessingResource<ItemDto>> _itemDtoChannel;
     private readonly DbContext _dbContext;
-    private readonly IItemAdapter _itemAdapter;
 
     public ItemService(
         Channel<ProcessingResource<ItemDto>> itemDtoChannel, 
-        DbContext dbContext, 
-        IItemAdapter itemAdapter
+        DbContext dbContext
         )
     {
         _itemDtoChannel = itemDtoChannel;
         _dbContext = dbContext;
-        _itemAdapter = itemAdapter;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -38,7 +35,7 @@ public class ItemService : BackgroundService
                     itemDto.StartProcessing();
                     Console.WriteLine($"Processing item {itemDto.Id}");
                     var idFilter = MongoDB.Driver.Builders<Item>.Filter.Eq("_id", itemDto.Id);
-                    var entity = _itemAdapter.ConvertToDomain(itemDto.Resource, itemDto.CurrentPage);
+                    var entity = ItemAdapter.ConvertToDomain(itemDto.Resource, itemDto.CurrentPage);
                     
                     var replaced = await _dbContext.Items.FindOneAndReplaceAsync<Item>(idFilter,
                         entity,

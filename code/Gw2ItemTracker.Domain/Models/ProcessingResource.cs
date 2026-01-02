@@ -5,7 +5,7 @@ public class ProcessingResource<T>(long id, string endpoint, ProcessingStatus st
     public long Id { get; set; } = id;
     public string Endpoint { get; set; } = endpoint;
     public ProcessingStatus Status { get; private set; } = status;
-    public T? Resource { get; private set; } = resource;
+    public T Resource { get; private set; } = resource;
     public int CurrentPage { get; private set; } = currentPage;
 
     public void StartProcessing()

@@ -1,11 +1,11 @@
 using Gw2ItemTracker.Domain.Dto;
 using Gw2ItemTracker.Domain.Models;
 
-namespace Gw2ItemTracker.Domain.Adapters;
+namespace Gw2ItemTracker.Services.Adapters;
 
-public class ItemAdapter : IItemAdapter
+public static class ItemAdapter
 {
-    public Item ConvertToDomain(ItemDto itemDto, int currentPage) =>
+    public static Item ConvertToDomain(ItemDto itemDto, int currentPage) =>
         new Item(
             itemDto.name,
             itemDto.description,
@@ -18,8 +18,8 @@ public class ItemAdapter : IItemAdapter
             ConvertToDomain(itemDto.details),
             currentPage
         );
-
-    private ItemDetail? ConvertToDomain(ItemDetailDto? dto)
+    
+    private static ItemDetail? ConvertToDomain(ItemDetailDto? dto)
     {
         return dto is null
             ? null
@@ -38,7 +38,7 @@ public class ItemAdapter : IItemAdapter
     }
 
 
-    private InfixUpgrade? ConvertToDomain(InfixUpgradeDto? dto)
+    private static InfixUpgrade? ConvertToDomain(InfixUpgradeDto? dto)
     {
         return dto is null
             ? null

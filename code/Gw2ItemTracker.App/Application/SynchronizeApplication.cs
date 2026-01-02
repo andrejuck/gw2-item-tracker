@@ -50,7 +50,7 @@ public class SynchronizeApplication : ISynchronizeApplication
             pagedRequest.CurrentPage = lastPageProcessed;
         }
 
-        Task.Run(async () =>
+        _ = Task.Run(async () =>
         {
             do
             {
@@ -67,6 +67,7 @@ public class SynchronizeApplication : ISynchronizeApplication
 
                 foreach (var queueItem in processingQueueItems)
                 {
+                    if (string.IsNullOrEmpty(queueItem.Resource.name)) continue;
                     _itemDtoChannel.Writer.TryWrite(queueItem);
                 }
             } while (flowControl);
@@ -90,7 +91,7 @@ public class SynchronizeApplication : ISynchronizeApplication
             pagedRequest.CurrentPage = lastPageProcessed;
         }
 
-        Task.Run(async () =>
+        _ = Task.Run(async () =>
         {
             do
             {

@@ -1,8 +1,8 @@
 using System.Threading.Channels;
-using Gw2ItemTracker.Domain.Adapters;
 using Gw2ItemTracker.Domain.Dto;
 using Gw2ItemTracker.Domain.Models;
 using Gw2ItemTracker.Infra.Context;
+using Gw2ItemTracker.Services.Adapters;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 
@@ -12,17 +12,14 @@ public class RecipeService : BackgroundService
 {
     private readonly Channel<ProcessingResource<RecipeDto>> _recipeDtoChannel;
     private readonly DbContext _dbContext;
-    private readonly IRecipeAdapter _recipeAdapter;
 
     public RecipeService(
         Channel<ProcessingResource<RecipeDto>> recipeDtoChannel,
-        DbContext dbContext,
-        IRecipeAdapter recipeAdapter
+        DbContext dbContext
     )
     {
         _recipeDtoChannel = recipeDtoChannel;
         _dbContext = dbContext;
-        _recipeAdapter = recipeAdapter;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -76,7 +73,7 @@ public class RecipeService : BackgroundService
         Item recipeItem)
     {
         var idFilter = Builders<Recipe>.Filter.Eq("_id", recipeDto.Id);
-        var entity = _recipeAdapter.ConvertToDomain(recipeDto.Resource, recipeItem, recipeDto.CurrentPage);
+        var entity = RecipeAdapter.ConvertToDomain(recipeDto.Resource, recipeItem, recipeDto.CurrentPage);
         var replaced = await _dbContext.Recipes.FindOneAndReplaceAsync<Recipe>(idFilter,
             entity,
             cancellationToken: stoppingToken);

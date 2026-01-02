@@ -1,7 +1,7 @@
 using Gw2ItemTracker.Domain.Dto;
 using Gw2ItemTracker.Domain.Models;
 
-namespace Gw2ItemTracker.Domain.Adapters;
+namespace Gw2ItemTracker.App.Adapters;
 
 public class AccountMaterialAdapter : IAccountMaterialAdapter
 {

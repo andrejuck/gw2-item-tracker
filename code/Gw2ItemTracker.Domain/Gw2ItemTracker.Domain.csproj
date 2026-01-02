@@ -6,4 +6,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Reference Include="Libs.Api">
+        <HintPath>..\..\..\..\..\.nuget\packages\juck.libs.api\1.0.0\lib\net8.0\Libs.Api.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

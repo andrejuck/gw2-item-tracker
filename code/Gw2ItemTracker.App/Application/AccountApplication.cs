@@ -1,4 +1,4 @@
-using Gw2ItemTracker.Domain.Adapters;
+using Gw2ItemTracker.App.Adapters;
 using Gw2ItemTracker.Domain.DataContracts;
 using Gw2ItemTracker.Domain.Dto;
 using Gw2ItemTracker.Domain.Models;
