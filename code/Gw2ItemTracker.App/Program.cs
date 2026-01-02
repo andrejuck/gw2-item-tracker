@@ -20,10 +20,12 @@ builder.Services.AddMongoDbContext(mongoConn.ConnectionString, mongoConn.DbName)
 
 builder.Services.AddTransient<IGw2HttpClient, Gw2HttpClient>();
 builder.Services.AddTransient<ISynchronizeApplication, SynchronizeApplication>();
+builder.Services.AddTransient<IAccountApplication, AccountApplication>();
 
 builder.Services.AddScoped<ISynchronizeAdapter, SynchronizeAdapter>();
 builder.Services.AddTransient<IItemAdapter, ItemAdapter>();
 builder.Services.AddTransient<IRecipeAdapter, RecipeAdapter>();
+builder.Services.AddTransient<IAccountMaterialAdapter, AccountMaterialAdapter>();
 
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();

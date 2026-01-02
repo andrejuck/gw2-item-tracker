@@ -1,5 +1,7 @@
 using Gw2ItemTracker.Domain.DataContracts;
+using Gw2ItemTracker.Domain.Models;
 using Gw2ItemTracker.Infra.Context;
+using Libs.Api.Infra;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -8,10 +10,12 @@ namespace Gw2ItemTracker.Infra.Repositories;
 public class ItemRepository : IItemRepository
 {
     private readonly DbContext _dbContext;
+    private FilterDefinitionBuilder<Item> _filterBuilder;
 
     public ItemRepository(DbContext dbContext)
     {
         _dbContext = dbContext;
+        _filterBuilder = Builders<Item>.Filter;
     }
 
     public async Task<int> GetLastPageProcessedAsync()
@@ -31,5 +35,11 @@ public class ItemRepository : IItemRepository
 
         return result["CurrentPage"].AsInt32;
 
+    }
+
+    public async Task<Item?> FindByIdAsync(int dtoItemId)
+    {
+        var idFilter = _filterBuilder.Eq(x => x.Id, dtoItemId);
+        return await _dbContext.Items.Find(idFilter).FirstOrDefaultAsync();
     }
 }

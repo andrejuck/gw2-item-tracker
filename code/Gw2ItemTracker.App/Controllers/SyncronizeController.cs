@@ -1,11 +1,4 @@
-using System.Threading.Channels;
-using Gw2ItemTracker.App.Adapters;
 using Gw2ItemTracker.App.Application;
-using Gw2ItemTracker.Domain.DataContracts;
-using Gw2ItemTracker.Domain.Dto;
-using Gw2ItemTracker.Domain.Models;
-using Gw2ItemTracker.Infra;
-using Libs.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gw2ItemTracker.App.Controllers;

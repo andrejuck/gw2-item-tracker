@@ -30,6 +30,31 @@ public class Gw2HttpClient : IGw2HttpClient
         var response = await _client.GetAsync(uriBuilder.Uri);
         var content = await response.Content.ReadAsStringAsync();
         
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+        
+        return JsonSerializer.Deserialize<T>(content, _jsonSerializerOptions);
+    }
+    
+    public async Task<T?> GetAuthAsync<T>(string endpoint, string token)
+    {
+        _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+        
+        var uriBuilder = new UriBuilder(_client.BaseAddress)
+        {
+            Path = endpoint
+        };
+        
+        var response = await _client.GetAsync(uriBuilder.Uri);
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+        
         return JsonSerializer.Deserialize<T>(content, _jsonSerializerOptions);
     }
 } 
