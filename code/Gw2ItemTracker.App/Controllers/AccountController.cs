@@ -18,18 +18,18 @@ public class AccountController : Controller
     }
 
     [HttpGet("materials")]
-    public async Task<IActionResult> GetMaterialsAsync()
+    public async Task<IActionResult> GetMaterialsAsync([FromHeader(Name = "gw2-api-key")]  string? apiKey)
     {
-        if (!ApiKeyHeaderExists()) 
+        if (string.IsNullOrEmpty(apiKey)) 
             return Unauthorized();
 
         var materials = await _accountApplication.GetAccountMaterialsAsync(_apiKey);
         return Ok(materials);
     }
     [HttpGet("characters")]
-    public async Task<IActionResult> GetAllCharactersAsync()
+    public async Task<IActionResult> GetAllCharactersAsync([FromHeader(Name = "gw2-api-key")]  string? apiKey)
     {
-        if (!ApiKeyHeaderExists()) 
+        if (string.IsNullOrEmpty(apiKey)) 
             return Unauthorized();
         
         var characters = await _accountApplication.GetAllCharactersAsync(_apiKey);
@@ -37,25 +37,14 @@ public class AccountController : Controller
     }
     
     [HttpGet("characters/{id}")]
-    public async Task<IActionResult> GetAllCharactersAsync(string id)
+    public async Task<IActionResult> GetAllCharactersAsync(
+        [FromHeader(Name = "gw2-api-key")]  string? apiKey,
+        string id)
     {
-        if (!ApiKeyHeaderExists()) 
+        if (string.IsNullOrEmpty(apiKey)) 
             return Unauthorized();
         
         var character = await _accountApplication.GetCharacterByIdAsync(id, _apiKey);
         return Ok(character);
     }
-    
-    private bool ApiKeyHeaderExists()
-    {
-        _apiKey = HttpContext.Request.Headers["gw2-api-key"].FirstOrDefault();
-
-        if(_apiKey is null)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
 }
