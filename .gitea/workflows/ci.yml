@@ -14,3 +14,4 @@ jobs:
         uses: ./.gitea/actions/step-dotnet-build
         with:
           working-dir: code
+          github-token: ${{ secrets.GIT_HUB_TOKEN }}

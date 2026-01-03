@@ -19,6 +19,9 @@ inputs:
     description: Linux base architecture
     required: false
     default: linux-x64
+  github-token:
+    description: Github token
+    required: true
 
 runs:
   using: "composite"
@@ -30,7 +33,7 @@ runs:
         dotnet-version: '${{ inputs.dotnet-version }}.0.x'
         source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       env:
-        NUGET_AUTH_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+        NUGET_AUTH_TOKEN: ${{ inputs.github-token }}
 #test
     - name: Restore
       shell: sh
