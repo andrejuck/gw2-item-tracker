@@ -5,7 +5,10 @@ namespace Gw2ItemTracker.Services.Adapters;
 
 public static class RecipeAdapter
 {
-    public static Recipe ConvertToDomain(RecipeDto dto, Item recipeItem, int currentPage) =>
+    public static Recipe ConvertToDomain(RecipeDto dto,
+        Item recipeItem,
+        int currentPage,
+        IEnumerable<Item> ingredients) =>
         new Recipe(dto.id,
             dto.type,
             dto.output_item_id,
@@ -15,10 +18,10 @@ public static class RecipeAdapter
             dto.disciplines,
             dto.min_rating,
             dto.flags,
-            ConvertToDomain(dto.ingredients),
+            ConvertToDomain(dto.ingredients, ingredients),
             dto.chat_link,
             currentPage);
 
-    private static IEnumerable<Ingredient> ConvertToDomain(IEnumerable<IngredientDto> dtos) =>
-        dtos.Select(dto => new Ingredient(dto.item_id, dto.type, dto.count));
+    private static IEnumerable<Ingredient> ConvertToDomain(IEnumerable<IngredientDto> dtos, IEnumerable<Item> ingredientsInfo) =>
+        dtos.Select(dto => new Ingredient(dto.item_id, dto.type, dto.count, ingredientsInfo.FirstOrDefault(x => x.Id.Equals(dto.item_id))?.Name));
 }

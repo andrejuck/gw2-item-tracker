@@ -44,7 +44,8 @@ public class RecipeService : BackgroundService
                         continue;
                     }
                     
-                    await AddOrUpdateRecipeAsync(stoppingToken, recipeDto, recipeItem);
+                    var recipeIngredientsItem = await FindRecipeIngredientsAsync(stoppingToken, recipeDto);
+                    await AddOrUpdateRecipeAsync(stoppingToken, recipeDto, recipeItem, recipeIngredientsItem);
 
                     recipeDto.CompleteProcessing();
                 }
@@ -69,11 +70,20 @@ public class RecipeService : BackgroundService
         }
     }
 
-    private async Task AddOrUpdateRecipeAsync(CancellationToken stoppingToken, ProcessingResource<RecipeDto> recipeDto,
-        Item recipeItem)
+    private async Task<IEnumerable<Item>> FindRecipeIngredientsAsync(CancellationToken stoppingToken, ProcessingResource<RecipeDto> recipeDto)
+    {
+        var idsFilter = Builders<Item>.Filter.In("_id", recipeDto.Resource.ingredients.Select(x => x.item_id));
+        var ingredientDtoList = await _dbContext.Items.Find(idsFilter).ToListAsync(stoppingToken);
+        return ingredientDtoList;
+    }
+
+    private async Task AddOrUpdateRecipeAsync(CancellationToken stoppingToken,
+        ProcessingResource<RecipeDto> recipeDto,
+        Item recipeItem, 
+        IEnumerable<Item> ingredients)
     {
         var idFilter = Builders<Recipe>.Filter.Eq("_id", recipeDto.Id);
-        var entity = RecipeAdapter.ConvertToDomain(recipeDto.Resource, recipeItem, recipeDto.CurrentPage);
+        var entity = RecipeAdapter.ConvertToDomain(recipeDto.Resource, recipeItem, recipeDto.CurrentPage, ingredients);
         var replaced = await _dbContext.Recipes.FindOneAndReplaceAsync<Recipe>(idFilter,
             entity,
             cancellationToken: stoppingToken);

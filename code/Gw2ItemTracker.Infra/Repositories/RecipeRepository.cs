@@ -63,21 +63,13 @@ public class RecipeRepository : IRecipeRepository
             new List<BsonElement>()
             {
                 new("Result", "$items"),
-                new("TotalItems", new BsonDocument("$arrayElemAt", new BsonArray()
-                {
-                    "$totalCount.count",
-                    0
-                })),
+                new("TotalItems", new BsonDocument("$first", "$totalCount.count")),
                 new("PageSize", new BsonDocument("$literal", pagedRequest.PageSize)),
                 new("CurrentPage", new BsonDocument("$literal", pagedRequest.CurrentPage)),
                 new("TotalPages", new BsonDocument("$ceil",
                         new BsonDocument("$divide", new BsonArray()
                         {
-                            new BsonDocument("$arrayElemAt", new BsonArray()
-                            {
-                                "$totalCount.count",
-                                0,
-                            }),
+                            new BsonDocument("$first", "$totalCount.count"),
                             pagedRequest.PageSize
                         })
                     )
@@ -97,7 +89,7 @@ public class RecipeRepository : IRecipeRepository
                         {
                             new BsonDocument("$sort", new BsonDocument(pagedRequest.SortKey, 1)),
                             new BsonDocument("$skip", pagedRequest.CurrentPage * pagedRequest.PageSize),
-                            new BsonDocument("$limit", pagedRequest.PageSize),
+                            new BsonDocument("$limit", pagedRequest.PageSize)
                         }
                     ),
                     new("totalCount",

@@ -13,4 +13,4 @@ public record RecipeView(
     string ChatLink
 );
 
-public record IngredientView(int Id, string Type, int Count);
+public record IngredientView(int Id, string Type, int Count, string ItemName);

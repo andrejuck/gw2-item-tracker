@@ -24,7 +24,7 @@ public class RecipeAdapter : IRecipeAdapter
             entity.TimeToCraftMs,
             entity.Disciplines,
             entity.MinRating,
-            entity.Ingredients.Select(x => new IngredientView(x.Id, x.Type, x.Count)),
+            entity.Ingredients.Select(x => new IngredientView(x.Id, x.Type, x.Count, x.ItemName)),
             entity.ChatLink
         );
 }
