@@ -31,7 +31,7 @@ runs:
         source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-
+#test
     - name: Restore
       shell: sh
       run: dotnet restore
