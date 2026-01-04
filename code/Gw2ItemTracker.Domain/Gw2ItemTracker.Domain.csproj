@@ -10,5 +10,4 @@
       <PackageReference Include="Juck.Libs.Api" Version="1.0.0" />
     </ItemGroup>
 
-
 </Project>
