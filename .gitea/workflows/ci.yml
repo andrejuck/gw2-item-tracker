@@ -33,6 +33,6 @@ jobs:
         run: |
           export DOCKER_BUILDKIT=1
           docker buildx build --secret id=github_token,env=GITHUB_TOKEN \
-            -t $IMAGE_NAME:latest \
+            -t registry.gitlab.com/{{ vars.repository_owner }}/{{ vars.repository_name }}:latest \
             --push \ 
             .
