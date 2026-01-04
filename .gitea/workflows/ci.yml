@@ -32,7 +32,10 @@ jobs:
           IMAGE_NAME: registry.gitlab.com/{{ vars.repository_owner }}/{{ vars.repository_name }}
         run: |
           export DOCKER_BUILDKIT=1
-          docker buildx build --secret id=github_token,env=GITHUB_TOKEN \
-            -t registry.gitlab.com/{{ vars.repository_owner }}/{{ vars.repository_name }}:latest \
-            --push \ 
+          cd code
+          echo $GITHUB_TOKEN
+          docker buildx build \
+            --secret id=github_token,env=GITHUB_TOKEN \
+            -t registry.gitlab.com/andrejuck/gw2-item-tracker:latest \
+            --push \
             .
