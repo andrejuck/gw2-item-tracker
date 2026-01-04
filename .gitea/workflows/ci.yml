@@ -36,7 +36,6 @@ jobs:
           echo $GITHUB_TOKEN
           docker buildx build \
             --secret id=github_token,env=GITHUB_TOKEN \
-            -t registry.gitlab.com/andrejuck/gw2-item-tracker:latest \
             -t registry.gitlab.com/andrejuck/gw2-item-tracker:{{ gitea.run_number }} \
             --push \
             .
