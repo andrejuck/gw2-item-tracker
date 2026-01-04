@@ -13,7 +13,7 @@ jobs:
       - name: Setup and build .NET
         uses: ./.gitea/actions/step-dotnet-build
         with:
-          working-dir: code
+          working-dir: code/backend
           github-token: ${{ secrets.GIT_HUB_TOKEN }}
           
       - name: Set up Docker Buildx
@@ -33,7 +33,7 @@ jobs:
           BUILD_NUMBER: ${{ gitea.run_number }}
         run: |
           export DOCKER_BUILDKIT=1
-          cd code
+          cd code/backend
           docker buildx build \
             --secret id=github_token,env=GITHUB_TOKEN \
             -t "${IMAGE_NAME}:latest" \
