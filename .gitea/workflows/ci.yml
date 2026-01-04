@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           export DOCKER_BUILDKIT=1
-          ls
+          cd code
           docker buildx build \
             --secret id=github_token,env=GITHUB_TOKEN \
             -t registry.gitlab.com/andrejuck/gw2-item-tracker:latest \
