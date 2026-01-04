@@ -33,7 +33,7 @@ runs:
         dotnet-version: '${{ inputs.dotnet-version }}.0.x'
         source-url: https://nuget.pkg.github.com/andrejuck/index.json
       env:
-        NUGET_AUTH_TOKEN: ${{ inputs.github-token }}
+        NUGET_AUTH_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
         
     - name: Restore
       shell: sh
