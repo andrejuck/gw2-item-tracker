@@ -7,9 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="Libs.Api">
-        <HintPath>..\..\..\..\..\.nuget\packages\juck.libs.api\1.0.0\lib\net8.0\Libs.Api.dll</HintPath>
-      </Reference>
+      <PackageReference Include="Juck.Libs.Api" Version="1.0.0" />
     </ItemGroup>
+
 
 </Project>
