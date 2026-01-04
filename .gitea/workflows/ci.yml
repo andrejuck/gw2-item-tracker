@@ -34,10 +34,9 @@ jobs:
         run: |
           export DOCKER_BUILDKIT=1
           cd code
-          echo $GITHUB_TOKEN
           docker buildx build \
             --secret id=github_token,env=GITHUB_TOKEN \
             -t $IMAGE_NAME:latest \
-            -t $IMAGE_NAME:rc-$BUILD_NUMBER \
+            -t $IMAGE_NAME:$BUILD_NUMBER \
             --push \
             .
