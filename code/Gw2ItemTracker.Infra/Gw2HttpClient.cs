@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Libs.Api.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Gw2ItemTracker.Infra;
 
@@ -15,46 +17,63 @@ public class Gw2HttpClient : IGw2HttpClient
         {
             PropertyNameCaseInsensitive = true,
             IncludeFields = true,
-            IgnoreNullValues = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         };
     }
 
     public async Task<T?> GetAsync<T>(PagedRequest request, string endpoint)
     {
-        var uriBuilder = new UriBuilder(_client.BaseAddress)
+        try
         {
-            Query = $"page={request.CurrentPage - 1}&page_size={request.PageSize}",
-            Path = endpoint 
-        };
+            var uriBuilder = new UriBuilder(_client.BaseAddress)
+            {
+                Query = $"page={request.CurrentPage - 1}&page_size={request.PageSize}",
+                Path = endpoint 
+            };
         
-        var response = await _client.GetAsync(uriBuilder.Uri);
-        var content = await response.Content.ReadAsStringAsync();
+            var response = await _client.GetAsync(uriBuilder.Uri);
+            var content = await response.Content.ReadAsStringAsync();
         
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(content);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(content);
+            }
+        
+            return JsonSerializer.Deserialize<T>(content, _jsonSerializerOptions);
         }
-        
-        return JsonSerializer.Deserialize<T>(content, _jsonSerializerOptions);
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
     }
     
     public async Task<T?> GetAuthAsync<T>(string endpoint, string token)
     {
-        _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-        
-        var uriBuilder = new UriBuilder(_client.BaseAddress)
+        try
         {
-            Path = endpoint
-        };
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         
-        var response = await _client.GetAsync(uriBuilder.Uri);
-        var content = await response.Content.ReadAsStringAsync();
+            var uriBuilder = new UriBuilder(_client.BaseAddress)
+            {
+                Path = endpoint
+            };
+        
+            var response = await _client.GetAsync(uriBuilder.Uri);
+            var content = await response.Content.ReadAsStringAsync();
 
-        if (!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(content);
+            }
+            
+            return JsonSerializer.Deserialize<T>(content, _jsonSerializerOptions);
+        }
+        catch (Exception e)
         {
-            throw new Exception(content);
+            Console.WriteLine(e.Message);
+            throw;
         }
         
-        return JsonSerializer.Deserialize<T>(content, _jsonSerializerOptions);
     }
 } 
