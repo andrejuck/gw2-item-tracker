@@ -10,7 +10,6 @@ namespace Gw2ItemTracker.App.Controllers;
 public class AccountController : Controller
 {
     private readonly IAccountApplication _accountApplication;
-    private string? _apiKey;
 
     public AccountController(IAccountApplication accountApplication)
     {
@@ -23,7 +22,7 @@ public class AccountController : Controller
         if (string.IsNullOrEmpty(apiKey)) 
             return Unauthorized();
 
-        var materials = await _accountApplication.GetAccountMaterialsAsync(_apiKey);
+        var materials = await _accountApplication.GetAccountMaterialsAsync(apiKey);
         return Ok(materials);
     }
     [HttpGet("characters")]
@@ -32,7 +31,7 @@ public class AccountController : Controller
         if (string.IsNullOrEmpty(apiKey)) 
             return Unauthorized();
         
-        var characters = await _accountApplication.GetAllCharactersAsync(_apiKey);
+        var characters = await _accountApplication.GetAllCharactersAsync(apiKey);
         return Ok(characters);
     }
     
@@ -44,7 +43,7 @@ public class AccountController : Controller
         if (string.IsNullOrEmpty(apiKey)) 
             return Unauthorized();
         
-        var character = await _accountApplication.GetCharacterByIdAsync(id, _apiKey);
+        var character = await _accountApplication.GetCharacterByIdAsync(id, apiKey);
         return Ok(character);
     }
 }
