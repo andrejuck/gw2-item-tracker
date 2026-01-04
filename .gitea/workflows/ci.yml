@@ -28,7 +28,7 @@ jobs:
 
       - name: Build and push image
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
         run: |
           export DOCKER_BUILDKIT=1
           cd code
