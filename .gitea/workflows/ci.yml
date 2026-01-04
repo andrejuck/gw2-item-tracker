@@ -36,6 +36,6 @@ jobs:
           docker buildx build \
             --secret id=github_token,env=GITHUB_TOKEN \
             -t $IMAGE_NAME:latest \
-            -t $IMAGE_NAME:rc-${{ github.run_number }}
+            -t $IMAGE_NAME:rc-${{ github.run_number }} \
             --push \
             .
