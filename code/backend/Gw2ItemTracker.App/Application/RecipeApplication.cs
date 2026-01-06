@@ -9,12 +9,15 @@ public class RecipeApplication : IRecipeApplication
 {
     private readonly IRecipeAdapter _adapter;
     private readonly IRecipeRepository _repository;
+    private readonly ILogger<RecipeApplication> _logger;
 
     public RecipeApplication(IRecipeAdapter adapter,
-        IRecipeRepository repository)
+        IRecipeRepository repository, 
+        ILogger<RecipeApplication> logger)
     {
         _adapter = adapter;
         _repository = repository;
+        _logger = logger;
     }
 
     public async Task<PagedResponse<RecipeView>> GetPagedAsync(PagedRequest pagedRequest, string? searchString)
@@ -25,6 +28,13 @@ public class RecipeApplication : IRecipeApplication
     public async Task<RecipeView?> GetByIdAsync(int recipeId)
     {
         var entity = await _repository.FindByIdAsync(recipeId);
-        return entity is null ? null : _adapter.ConvertToView(entity);
+        if (entity is null)
+        {
+            _logger.LogError($"Recipe with id {recipeId} not found");
+            return null;
+        }
+        
+        _logger.LogInformation($"Recipe recipe with id {recipeId} found");
+        return _adapter.ConvertToView(entity);
     }
 }

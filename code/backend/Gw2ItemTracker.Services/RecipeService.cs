@@ -4,6 +4,7 @@ using Gw2ItemTracker.Domain.Models;
 using Gw2ItemTracker.Infra.Context;
 using Gw2ItemTracker.Services.Adapters;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace Gw2ItemTracker.Services;
@@ -12,14 +13,15 @@ public class RecipeService : BackgroundService
 {
     private readonly Channel<ProcessingResource<RecipeDto>> _recipeDtoChannel;
     private readonly DbContext _dbContext;
+    private readonly ILogger<RecipeService> _logger;
 
     public RecipeService(
         Channel<ProcessingResource<RecipeDto>> recipeDtoChannel,
-        DbContext dbContext
-    )
+        DbContext dbContext, ILogger<RecipeService> logger)
     {
         _recipeDtoChannel = recipeDtoChannel;
         _dbContext = dbContext;
+        _logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,12 +36,12 @@ public class RecipeService : BackgroundService
                 try
                 {
                     recipeDto.StartProcessing();
-                    Console.WriteLine($"Processing recipe {recipeDto.Id}");
+                    _logger.LogInformation($"Processing recipe {recipeDto.Id}");
                     
                     var recipeItem = await FindRecipeItemAsync(stoppingToken, recipeDto);
                     if (recipeItem is null)
                     {
-                        Console.WriteLine($"Item {recipeDto.Resource.output_item_id} not found for recipe {recipeDto.Id}");
+                        _logger.LogError($"Item {recipeDto.Resource.output_item_id} not found for recipe {recipeDto.Id}");
                         recipeDto.FailProcessing();
                         continue;
                     }
@@ -51,21 +53,21 @@ public class RecipeService : BackgroundService
                 }
                 catch (OperationCanceledException e) when (stoppingToken.IsCancellationRequested)
                 {
-                    recipeDto.FailProcessing();
-                    Console.WriteLine(e);
+                    recipeDto.FailProcessing(); 
+                    _logger.LogError("Operation cancelled {e}", e);
                     continue;
                 }
                 catch (Exception e)
                 {
                     recipeDto.FailProcessing();
-                    Console.WriteLine(e);
+                    _logger.LogError("An error occurred while processing recipe {e}", e);
                     continue;
                 }
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError("An error occurred while reading from recipe queue {e}", e);
             throw;
         }
     }

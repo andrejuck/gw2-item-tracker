@@ -9,17 +9,29 @@ public class ItemApplication : IItemApplication
 {
     private readonly IItemRepository _itemRepository;
     private readonly IItemAdapter _adapter;
+    private readonly ILogger<ItemApplication> _logger;
 
-    public ItemApplication(IItemRepository itemRepository, IItemAdapter adapter)
+    public ItemApplication(IItemRepository itemRepository, 
+        IItemAdapter adapter, 
+        ILogger<ItemApplication> logger)
     {
         _itemRepository = itemRepository;
         _adapter = adapter;
+        _logger = logger;
     }
 
     public async Task<ItemView?> GetItemByIdAsync(int itemId)
     {
         var entity = await _itemRepository.FindByIdAsync(itemId);
-        return entity is null ? null : _adapter.ConvertToView(entity);
+
+        if (entity is null)
+        {
+            _logger.LogError($"Item with id {itemId} not found");
+            return null;
+        }
+        
+        _logger.LogInformation($"Item with id {itemId} was found");
+        return _adapter.ConvertToView(entity);
     }
 
     public async Task<PagedResponse<ItemView>> GetPagedItemsAsync(PagedRequest pagedRequest, string? searchString)
