@@ -10,12 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        
       - name: Setup and build .NET
         uses: ./.gitea/actions/step-dotnet-build
         with:
           working-dir: ${{ vars.WORKING_DIRECTORY }}
           github-token: ${{ secrets.GIT_HUB_TOKEN }}
           
+      - name: Get application version
+        id: get_version
+        run: |
+          DOTNET_VERSION=$(dotnet msbuild ${{ vars.WORKING_DIRECTORY }}/Gw2ItemTracker.App/Gw2ItemTracker.App.csproj /pp | grep "<Version>" | head -n 1 | sed -E 's/.*<Version>(.*)<\/Version>.*/\1/')
+          echo "DOTNET_VERSION=$DOTNET_VERSION" >> $GITHUB_ENV
+
+      - name: Set image name env
+        id: set_imageName
+        run: |
+          IMAGE_NAME=registry.gitlab.com/${{ vars.REPOSITORY_OWNER }}/${{ gitea.REPOSITORY_NAME  }}
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITEA_ENV
+
       - name: Set up Docker Buildx
         run: |
           docker buildx create --use --name gitea-builder || docker buildx use gitea-builder
@@ -25,18 +38,6 @@ jobs:
           echo "${{ secrets.GITLAB_PAT }}" | docker login registry.gitlab.com \
             -u "${{ secrets.GITLAB_USER }}" \
             --password-stdin
-
-      - name: Get application version
-        id: get_version
-        run: |
-          DOTNET_VERSION=$(dotnet msbuild ${{ vars.WORKING_DIRECTORY }}/Gw2ItemTracker.App/Gw2ItemTracker.App.csproj -nologo -t:GetProperty -p:PropertyName=Version | tail -n 1)
-          echo "DOTNET_VERSION=$DOTNET_VERSION" >> $GITHUB_ENV
-
-      - name: Set image name env
-        id: set_imageName
-        run: |
-          IMAGE_NAME=registry.gitlab.com/${{ vars.REPOSITORY_OWNER }}/${{ gitea.REPOSITORY_NAME  }}
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITEA_ENV
 
       - name: Build and push image
         env:
