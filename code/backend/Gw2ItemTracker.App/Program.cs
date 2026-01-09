@@ -46,6 +46,8 @@ builder.Services.AddControllers()
 
 var app = builder.Build();
 
+app.MapGet("/health-check", () => "Healthy");
+
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
