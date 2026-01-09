@@ -9,6 +9,6 @@
       - backend
     
   backend:
-    image: ${REPO_IMAGE_NAME:-gw2itemtracker.app}:${REPO_IMAGE_TAG:-dev}
+    image: ${PROJECT_IMAGE_NAME:-gw2itemtracker.app}:${PROJECT_IMAGE_TAG:-dev}
     expose:
       - "8080"
