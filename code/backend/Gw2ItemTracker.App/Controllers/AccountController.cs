@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Gw2ItemTracker.App.Controllers;
 
 [ApiController]
-[Route("api/account")]
+[Route("account")]
 public class AccountController : Controller
 {
     private readonly IAccountApplication _accountApplication;

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Gw2ItemTracker.App.Controllers;
 
 [ApiController]
-[Route("api/synchronize")]
+[Route("synchronize")]
 public class SyncronizeController : Controller
 {
     private readonly ISynchronizeApplication _application;

@@ -1,0 +1,8 @@
+﻿# syntax=docker/dockerfile:1.6
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+WORKDIR /app
+
+# Rider já fez o build
+ENTRYPOINT ["dotnet", "Gw2ItemTracker.App.dll"]
