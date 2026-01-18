@@ -9,7 +9,7 @@
       - backend
     
   backend:
-    image: ${PROJECT_IMAGE_NAME:-gw2itemtracker.app}:${PROJECT_IMAGE_TAG:-dev}
+    image: ${PROJECT_IMAGE_NAME:-gw2itemtracker.app}:${PROJECT_IMAGE_TAG:-latest}
     expose:
       - "8080"
     secrets:
