@@ -23,7 +23,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.GIT_HUB_TOKEN }}
       run: |
         export DOCKER_BUILDKIT=1
-        cd ${{ inputs.working-directory }}
+        cd ${{ inputs.working-dir }}
         docker buildx build \
           -f ${{ inputs.dockerfile-name }} \
           --secret id=github_token,env=GITHUB_TOKEN \
