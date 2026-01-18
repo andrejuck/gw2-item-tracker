@@ -15,8 +15,8 @@
     expose:
       - "8080"
     secrets:
-      - mongodb_password
-      - mongodb_user
+      - gw2-item-tracker-backend_mongodb_password
+      - gw2-item-tracker-backend_mongodb_user
         
 secrets:
   gw2-item-tracker-backend_mongodb_password:
