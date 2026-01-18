@@ -1,8 +1,6 @@
 ﻿services:
   nginx:
     image: ${PROJECT_IMAGE_NAME}:nginx
-    volumes: 
-      - ./nginx:/etc/nginx
     ports:
       - "9999:9999"
     depends_on:
