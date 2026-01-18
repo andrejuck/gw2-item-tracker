@@ -46,6 +46,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
           BUILD_NUMBER: ${{ gitea.run_number }}
+          DOTNET_VERSION: ${DOTNET_VERSION}
         run: |
           export DOCKER_BUILDKIT=1
           cd ${{ vars.WORKING_DIRECTORY }}
