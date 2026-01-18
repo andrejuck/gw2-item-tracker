@@ -20,9 +20,9 @@ jobs:
       - name: Get application version
         id: get_version
         run: |
-          DOTNET_VERSION=$(dotnet msbuild ${{ vars.WORKING_DIRECTORY }}/Gw2ItemTracker.App/Gw2ItemTracker.App.csproj /pp | grep "<Version>" | head -n 1 | sed -E 's/.*<Version>(.*)<\/Version>.*/\1/')
-          echo "DOTNET_VERSION=$DOTNET_VERSION" >> $GITEA_ENV
-          echo "${DOTNET_VERSION}"
+          APPLICATION_VERSION=$(dotnet msbuild ${{ vars.WORKING_DIRECTORY }}/Gw2ItemTracker.App/Gw2ItemTracker.App.csproj /pp | grep "<Version>" | head -n 1 | sed -E 's/.*<Version>(.*)<\/Version>.*/\1/')
+          echo "APPLICATION_VERSION=$APPLICATION_VERSION" >> $GITEA_ENV
+          echo "${APPLICATION_VERSION}"
 
       - name: Set image name env
         id: set_imageName
@@ -46,14 +46,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
           BUILD_NUMBER: ${{ gitea.run_number }}
-          DOTNET_VERSION: ${DOTNET_VERSION}
         run: |
           export DOCKER_BUILDKIT=1
           cd ${{ vars.WORKING_DIRECTORY }}
           docker buildx build \
             --secret id=github_token,env=GITHUB_TOKEN \
             -t "${{ env.IMAGE_NAME }}:latest" \
-            -t "${{ env.IMAGE_NAME }}:%{{ env.DOTNET_VERSION }}" \
+            -t "${{ env.IMAGE_NAME }}:${{ env.APPLICATION_VERSION }}" \
             --push \
             .
           
@@ -72,6 +71,6 @@ jobs:
       - name: Deploy
         env:
           PROJECT_IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          PROJECT_IMAGE_TAG: ${{ env.DOTNET_VERSION }}
+          PROJECT_IMAGE_TAG: ${{ env.APPLICATION_VERSION }}
         run: |
           ssh ${{ secrets.SERVER_SSH_USER }}@${{ secrets.SERVER_SSH_HOST }} "cd /app/${{ vars.REPOSITORY_NAME  }}/.deploy && docker compose pull && docker compose up -d"
