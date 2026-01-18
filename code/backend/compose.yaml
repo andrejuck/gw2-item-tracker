@@ -12,7 +12,7 @@
     image: ${PROJECT_IMAGE_NAME:-gw2itemtracker.app}:${PROJECT_IMAGE_TAG:-latest}
     environment:
       MongoDbSettings__DbName: "gw2-item-tracker"
-      MongoDbSettings__Uri: "mongodb+srv://%5F%5Fusername%5F%5F:%5F%5Fpassword%5F%5Fgameslog.t8cho.mongodb.net/"
+      MongoDbSettings__Uri: "mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}gameslog.t8cho.mongodb.net/"
     expose:
       - "8080"
     secrets:
