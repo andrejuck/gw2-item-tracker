@@ -1,0 +1,14 @@
+﻿services:
+  nginx:
+    image: nginx:1.21-alpine
+    volumes: 
+      - ./nginx:/etc/nginx
+    ports:
+      - "9999:9999"
+    depends_on:
+      - backend
+    
+  backend:
+    image: ${PROJECT_IMAGE_NAME:-gw2itemtracker.app}:${PROJECT_IMAGE_TAG:-dev}
+    expose:
+      - "8080"
