@@ -19,7 +19,7 @@
       - mongodb_user
         
 secrets:
-  mongodb_password:
+  gw2-item-tracker-backend_mongodb_password:
     environment: "MONGODB_PASSWORD"
-  mongodb_user:
+  gw2-item-tracker-backend_mongodb_user:
     environment: "MONGODB_USER"
