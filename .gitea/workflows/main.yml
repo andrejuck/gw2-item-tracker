@@ -57,6 +57,8 @@ jobs:
             .
       - name: Setup and build .NET
         uses: ./.gitea/actions/step-nginx-push-image
+        env:
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
         with:
           working-dir: ${{ vars.WORKING_DIRECTORY }}
 

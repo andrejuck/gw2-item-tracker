@@ -27,6 +27,6 @@ runs:
         docker buildx build \
           -f ${{ inputs.dockerfile-name }} \
           --secret id=github_token,env=GITHUB_TOKEN \
-          -t "nginx:nginx" \
+          -t "${{ env.IMAGE_NAME }}:nginx" \
           --push \
           .
