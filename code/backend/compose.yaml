@@ -13,11 +13,11 @@
     expose:
       - "8080"
     secrets:
-      - mongodb_password
-      - mongodb_user
+      - backend_mongodb_password
+      - backend_mongodb_user
         
 secrets:
-  db_password:
-    environment: "MongoDbSettings__Password"
-  db_user:
-    environment: "MongoDbSettings__Username"
+  mongodb_password:
+    environment: "MONGODB_PASSWORD"
+  mongodb_user:
+    environment: "MONGODB_USER"
