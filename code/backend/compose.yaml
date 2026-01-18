@@ -12,3 +12,12 @@
     image: ${PROJECT_IMAGE_NAME:-gw2itemtracker.app}:${PROJECT_IMAGE_TAG:-dev}
     expose:
       - "8080"
+    secrets:
+      - mongodb_password
+      - mongodb_user
+        
+secrets:
+  db_password:
+    environment: "MongoDbSettings__Password"
+  db_user:
+    environment: "MongoDbSettings__Username"
