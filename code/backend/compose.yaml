@@ -15,8 +15,8 @@
     expose:
       - "8080"
     secrets:
-      - backend_mongodb_password
-      - backend_mongodb_user
+      - mongodb_password
+      - mongodb_user
         
 secrets:
   mongodb_password:
