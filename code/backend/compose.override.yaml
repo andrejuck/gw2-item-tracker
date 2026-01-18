@@ -1,0 +1,14 @@
+﻿services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    
+    ports:
+      - "9998:8080"
+      
+    volumes:
+      - ./Gw2ItemTracker.App/bin/Debug/net8.0:/app
+        
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
