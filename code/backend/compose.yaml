@@ -10,6 +10,8 @@
     
   backend:
     image: ${PROJECT_IMAGE_NAME:-gw2itemtracker.app}:${PROJECT_IMAGE_TAG:-latest}
+    environment:
+      MongoDbSettings__DbName: "gw2-item-tracker"
     expose:
       - "8080"
     secrets:
