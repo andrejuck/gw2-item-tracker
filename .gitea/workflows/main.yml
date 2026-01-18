@@ -55,7 +55,11 @@ jobs:
             -t "${{ env.IMAGE_NAME }}:${{ env.APPLICATION_VERSION }}" \
             --push \
             .
-          
+      - name: Setup and build .NET
+        uses: ./.gitea/actions/step-nginx-push-image
+        with:
+          working-dir: ${{ vars.WORKING_DIRECTORY }}
+
 #      - name: Copy docker-compose files
 #        run: |
 #          scp ${{ vars.WORKING_DIRECTORY }} compose.yml \

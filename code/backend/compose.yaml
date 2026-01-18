@@ -1,6 +1,6 @@
 ﻿services:
   nginx:
-    image: nginx:1.21-alpine
+    image: ${PROJECT_IMAGE_NAME}:nginx
     volumes: 
       - ./nginx:/etc/nginx
     ports:

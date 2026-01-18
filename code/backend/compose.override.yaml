@@ -1,4 +1,18 @@
 ﻿services:
+  
+  nginx:
+    image: nginx:nginx
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+      
+    volumes:
+      - ./nginx:/etc/nginx
+    ports:
+      - "9999:9999"
+    depends_on:
+      - backend
+  
   backend:
     build:
       context: .
@@ -12,3 +26,11 @@
         
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+      MongoDbSettings__DbName: "gw2-item-tracker"
+      MongoDbSettings__Uri: "mongodb+srv://__user__:__password__@gameslog.t8cho.mongodb.net/"
+      
+secrets: 
+  gw2-item-tracker-backend_mongodb_password: !override
+    file: /home/andrejuck/.microsoft/usersecrets/aa3a9d35-ecac-4cbf-bbd1-2d042df3f1cb/secrets.json
+  gw2-item-tracker-backend_mongodb_user: !override
+    file: /home/andrejuck/.microsoft/usersecrets/aa3a9d35-ecac-4cbf-bbd1-2d042df3f1cb/secrets.json
